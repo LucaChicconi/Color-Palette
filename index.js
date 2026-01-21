@@ -1,6 +1,5 @@
 let colorsArray = []
 
-// Objeto con traducciones
 const translations = {
     es: {
         monochrome: 'Monocromático',
@@ -24,17 +23,14 @@ const translations = {
     }
 };
 
-// Detectar idioma del navegador
 function getClientLanguage() {
     const browserLanguage = navigator.language || navigator.userLanguage;
     const languageCode = browserLanguage.split('-')[0];
     return translations[languageCode] ? languageCode : 'en';
 }
 
-// Obtener idioma actual
 let currentLanguage = getClientLanguage();
 
-// Aplicar traducciones a la página
 function applyTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(element => {
         const key = element.getAttribute('data-i18n');
@@ -42,7 +38,6 @@ function applyTranslations() {
     });
 }
 
-// Aplicar traducciones al cargar la página
 applyTranslations();
 
 function bringColors(){
@@ -66,7 +61,7 @@ function renderColors(){
             return `
             <div class ="container">
                 <div class = "color" style = "background-color: ${color.hex.value}">
-                <p class="color-code">${color.hex.value}</p>
+                <p class="color-code" data-hex-code="${color.hex.value}">${color.hex.value}</p>
                 </div>
             </div>
             `;
@@ -76,26 +71,50 @@ function renderColors(){
 
 document.getElementById('submit-btn').addEventListener('click', bringColors)
 
+// Variables para rastrear timeouts activos
+let activeTimeout = null;
+let activeElement = null;
+
 document.addEventListener('mouseover', (e) => {
     if (e.target.classList.contains('color-code')) {
-        const originalText = e.target.textContent;
-        e.target.textContent = '¡Haz clic para copiar!';
-        setTimeout(() => {
-            e.target.textContent = originalText;
+
+        if (activeTimeout) {
+            clearTimeout(activeTimeout);
+        }
+        
+        const originalText = e.target.getAttribute('data-hex-code');
+        e.target.textContent = 'Copiar';
+        activeElement = e.target;
+        
+        activeTimeout = setTimeout(() => {
+            if (activeElement === e.target) {
+                e.target.textContent = originalText;
+                activeTimeout = null;
+                activeElement = null;
+            }
         }, 800);
     }
 });
 
 document.addEventListener('click', (e) => {
 	if (e.target.classList.contains('color-code')) {
-		const hexCode = e.target.textContent;
+	
+		if (activeTimeout) {
+			clearTimeout(activeTimeout);
+		}
+		
+		const hexCode = e.target.getAttribute('data-hex-code');
 		navigator.clipboard.writeText(hexCode);
 		
-		const originalText = e.target.textContent;
 		e.target.textContent = '¡Copiado!';
+		activeElement = e.target;
 		
-		setTimeout(() => {
-			e.target.textContent = originalText;
+		activeTimeout = setTimeout(() => {
+			if (activeElement === e.target) {
+				e.target.textContent = hexCode;
+				activeTimeout = null;
+				activeElement = null;
+			}
 		}, 800);
 	}
 });

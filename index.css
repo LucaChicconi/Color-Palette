@@ -1,15 +1,11 @@
-/* #D0AFAB
-#ECCAC6
-#F7EAB3
-#C2E5CD
-#C9D8DE
- */
+
 
 * {
     box-sizing: border-box;
 }
 
 html, body {
+    font-family: 'monospace', sans-serif;
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -141,6 +137,14 @@ body {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+
+.color-code {
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space:nowrap;
+    font-size: 1vh;
+    
+}
 /* Responsive para pantallas menores a 480px */
 @media (max-width: 479px) {
     .select-color {
