@@ -1,5 +1,50 @@
 let colorsArray = []
 
+// Objeto con traducciones
+const translations = {
+    es: {
+        monochrome: 'Monocromático',
+        'monochrome-dark': 'Monocromático-Oscuro',
+        'monochrome-light': 'Monocromático-Claro',
+        analogic: 'Análogo',
+        complement: 'Complementario',
+        'analogic-complement': 'Análogo-Complementario',
+        triad: 'Tríada',
+        button: 'Obtener paleta de colores'
+    },
+    en: {
+        monochrome: 'Monochrome',
+        'monochrome-dark': 'Monochrome-dark',
+        'monochrome-light': 'Monochrome-light',
+        analogic: 'Analogic',
+        complement: 'Complement',
+        'analogic-complement': 'Analogic-Complement',
+        triad: 'Triad',
+        button: 'Get color scheme'
+    }
+};
+
+// Detectar idioma del navegador
+function getClientLanguage() {
+    const browserLanguage = navigator.language || navigator.userLanguage;
+    const languageCode = browserLanguage.split('-')[0];
+    return translations[languageCode] ? languageCode : 'en';
+}
+
+// Obtener idioma actual
+let currentLanguage = getClientLanguage();
+
+// Aplicar traducciones a la página
+function applyTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        element.textContent = translations[currentLanguage][key];
+    });
+}
+
+// Aplicar traducciones al cargar la página
+applyTranslations();
+
 function bringColors(){
     const chosenColor = document.getElementById('chosen-color').value.replace('#','')
     const chosenScheme = document.getElementById('chosen-scheme').value
@@ -21,7 +66,7 @@ function renderColors(){
             return `
             <div class ="container">
                 <div class = "color" style = "background-color: ${color.hex.value}">
-                <p>${color.hex.value}</p>
+                <p class="color-code">${color.hex.value}</p>
                 </div>
             </div>
             `;
@@ -30,15 +75,27 @@ function renderColors(){
 }
 
 document.getElementById('submit-btn').addEventListener('click', bringColors)
+
+document.addEventListener('mouseover', (e) => {
+    if (e.target.classList.contains('color-code')) {
+        const originalText = e.target.textContent;
+        e.target.textContent = '¡Haz clic para copiar!';
+        setTimeout(() => {
+            e.target.textContent = originalText;
+        }, 800);
+    }
+});
+
 document.addEventListener('click', (e) => {
-	if (e.target.dataset.hex) {
-		const spanEl = e.target.querySelector('span');
-		spanEl.textContent = 'Copied!';
-
-		navigator.clipboard.writeText(e.target.dataset.hex);
-
+	if (e.target.classList.contains('color-code')) {
+		const hexCode = e.target.textContent;
+		navigator.clipboard.writeText(hexCode);
+		
+		const originalText = e.target.textContent;
+		e.target.textContent = '¡Copiado!';
+		
 		setTimeout(() => {
-			spanEl.textContent = 'Copy';
+			e.target.textContent = originalText;
 		}, 800);
 	}
 });

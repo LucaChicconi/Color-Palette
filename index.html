@@ -11,18 +11,17 @@
             
             <input type="color" id = 'chosen-color'></input>
             <select id = 'chosen-scheme'>
-                <option value="monochrome" selected>Monochrome </option>
-                <option value="monochrome-dark">Monochrome-dark </option>
-                <option value="monochrome-light">Monochrome-light </option>
-                <option value="analogic">Analogic </option>
-                <option value="complement">Complement </option>
-                <option value="analogic-complement">Analogic-Complement </option>
-                <option value="triad">Triad </option>
+                <option value="monochrome" data-i18n="monochrome" selected>Monochrome </option>
+                <option value="monochrome-dark" data-i18n="monochrome-dark">Monochrome-dark </option>
+                <option value="monochrome-light" data-i18n="monochrome-light">Monochrome-light </option>
+                <option value="analogic" data-i18n="analogic">Analogic </option>
+                <option value="complement" data-i18n="complement">Complement </option>
+                <option value="analogic-complement" data-i18n="analogic-complement">Analogic-Complement </option>
+                <option value="triad" data-i18n="triad">Triad </option>
                 </option>
             </select>
-            <button type="submit" id = "submit-btn">Get color scheme</button>
+            <button type="submit" id = "submit-btn" data-i18n="button">Get color scheme</button>
            
-            <div class = "tip">Click the colors to copy the hexcode!</div>
         </header>
         
         <section class= "scheme" id ="color-palette">
